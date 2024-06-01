@@ -1,15 +1,13 @@
 package main
 
-type Point struct {
-	X, Y float64
+type Rectangle struct { // struct of type Rectangle
+	length, width int
 }
 
-func (p *Point) Abs() float64 {
-
-	return 0
+func (r *Rectangle) Area() int { // method calculating area of rectangle
+	return r.length * r.width
 }
 
-func (p *Point) Scale(s float64) {
-
-	return
+func (r *Rectangle) Perimeter() int { // method calculating perimeter of rectangle
+	return r.length*2 + r.width*2
 }
