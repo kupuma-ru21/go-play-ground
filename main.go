@@ -1,19 +1,15 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
-
-type myTime time.Time
-
-func (t myTime) first3Chars() {
-	fmt.Println(t)
+type Point struct {
+	X, Y float64
 }
 
-func main() {
-	m := myTime(time.Now())
-	//calling existing String method on anonymous Time field
-	// fmt.Println("Full time now:", m.String())
-	m.first3Chars()
+func (p *Point) Abs() float64 {
+
+	return 0
+}
+
+func (p *Point) Scale(s float64) {
+
+	return
 }
