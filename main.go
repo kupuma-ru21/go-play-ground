@@ -1,13 +1,15 @@
 package main
 
-type Rectangle struct { // struct of type Rectangle
-	length, width int
+/* basic data structure upon which we'll define methods */
+type employee struct {
+	salary float32
 }
 
-func (r *Rectangle) Area() int { // method calculating area of rectangle
-	return r.length * r.width
-}
+/*
+a method which will add a specified percent to an
 
-func (r *Rectangle) Perimeter() int { // method calculating perimeter of rectangle
-	return r.length*2 + r.width*2
+	employees salary
+*/
+func (this *employee) giveRaise(pct float32) {
+	this.salary = this.salary * (1 + pct)
 }
