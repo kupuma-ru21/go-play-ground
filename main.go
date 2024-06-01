@@ -1,44 +1,21 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
-type S struct {
-	a int
+type myTime struct {
+	time.Time //anonymous field
 }
 
-type SType S        // New type
-type SAlias = S     // Alias
-type IntType int    // New type
-type IntAlias = int // Alias
-
-func (recv S) print() { // function for type defined on type S
-	fmt.Printf("%t: %[1]v\n", S(recv))
+func (t myTime) first3Chars() string {
+	return t.String()[0:3]
 }
-func (recv SType) print() { // function for type defined on the basis of S
-	fmt.Printf("%t: %[1]v\n", S(recv))
-}
-
-func (recv SAlias) print() {
-	fmt.Printf("%t: %[1]v\n", recv)
-}
-
-func (recv IntType) print() { // function for type defined on type on the basis of int
-	fmt.Printf("%t: %[1]v\n", recv)
-}
-
-// func (recv IntAlias) print() {
-// 	fmt.Printf("%t: %[1]v\n", recv)
-// }
 
 func main() {
-	a := S{10}
-	a.print() // calling function from line 13
-	b := SType{20}
-	b.print() // calling function from line 16
-	c := SAlias{30}
-	c.print() // calling function from line 13
-	d := IntType(40)
-	d.print() // calling function from line 24
-	e := IntAlias(50)
-	e.print()
+	m := myTime{time.Now()}
+	//calling existing String method on anonymous Time field
+	fmt.Println("Full time now:", m.String())
+	fmt.Println("First 3 chars:", m.first3Chars()) //calling myTime.first3Chars
 }
