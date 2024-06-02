@@ -10,19 +10,13 @@ type Log struct {
 
 type Customer struct {
 	Name string
-	log  *Log
+	Log
 }
 
 func main() {
-	c := new(Customer)
-	c.Name = "Barack Obama"
-	c.log = new(Log)
-	c.log.msg = "1 - Yes we can!"
-	// shorter:
-	c = &Customer{"Barack Obama", &Log{"1 - Yes we can!"}}
-	fmt.Println(c.log)
-	c.log.Add("2 - After me, the world will be a better place!")
-	fmt.Println(c.Log())
+	c := &Customer{"Barack Obama", Log{"1 - Yes we can!"}}
+	c.Add("2 - After me, the world will be a better place!")
+	fmt.Println(c)
 }
 
 func (l *Log) Add(s string) {
@@ -33,6 +27,6 @@ func (l *Log) String() string {
 	return l.msg
 }
 
-func (c *Customer) Log() *Log {
-	return c.log
+func (c *Customer) String() string {
+	return c.Name + "\nLog:\n" + fmt.Sprintln(c.Log)
 }
