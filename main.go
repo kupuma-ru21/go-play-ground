@@ -2,23 +2,37 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
-type Point struct {
-	x, y float64
+type Log struct {
+	msg string
 }
 
-func (p *Point) Abs() float64 {
-	return math.Sqrt(p.x*p.x + p.y*p.y)
-}
-
-type NamedPoint struct {
-	Point // anonymous field of Point type
-	name  string
+type Customer struct {
+	Name string
+	log  *Log
 }
 
 func main() {
-	n := &NamedPoint{Point{3, 4}, "Pythagoras"} // making pointer type variable
-	fmt.Println(n.Abs())                        // prints 5
+	c := new(Customer)
+	c.Name = "Barack Obama"
+	c.log = new(Log)
+	c.log.msg = "1 - Yes we can!"
+	// shorter:
+	c = &Customer{"Barack Obama", &Log{"1 - Yes we can!"}}
+	fmt.Println(c.log)
+	c.log.Add("2 - After me, the world will be a better place!")
+	fmt.Println(c.Log())
+}
+
+func (l *Log) Add(s string) {
+	l.msg += "\n" + s
+}
+
+func (l *Log) String() string {
+	return l.msg
+}
+
+func (c *Customer) Log() *Log {
+	return c.log
 }
