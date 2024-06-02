@@ -1,32 +1,29 @@
 package main
 
-import (
-	"fmt"
-)
-
-type Log struct {
-	msg string
+type Simpler interface {
+	Get() int
+	Set(u int)
 }
 
-type Customer struct {
-	Name string
-	Log
+type Simple struct {
+	i int
+}
+
+func (p *Simple) Get() int {
+	return p.i
+}
+
+func (p *Simple) Set(u int) {
+	p.i = u
+}
+
+func fI(it Simpler) int { // function calling both methods through interface
+	it.Set(10)
+	return it.Get()
 }
 
 func main() {
-	c := &Customer{"Barack Obama", Log{"1 - Yes we can!"}}
-	c.Add("2 - After me, the world will be a better place!")
-	fmt.Println(c)
-}
-
-func (l *Log) Add(s string) {
-	l.msg += "\n" + s
-}
-
-func (l *Log) String() string {
-	return l.msg
-}
-
-func (c *Customer) String() string {
-	return c.Name + "\nLog:\n" + fmt.Sprintln(c.Log)
+	simple := new(Simple)
+	fI(simple)
+	println(fI(simple))
 }
