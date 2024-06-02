@@ -1,42 +1,49 @@
 package main
 
-import (
-	"fmt"
-	"math"
-)
-
-type Square struct {
-	side float32
+type Simpler interface {
+	Get() int
+	Set(u int)
 }
 
-type Circle struct {
-	radius float32
+type Simple struct {
+	integer int
 }
 
-type Shaper interface {
-	Area() float32
+func (p *Simple) Get() int {
+	return p.integer
+}
+
+func (p *Simple) Set(u int) {
+	p.integer = u
+}
+
+type RSimple struct {
+	integer int
+}
+
+func (p *RSimple) Get() int {
+	return p.integer
+}
+
+func (p *RSimple) Set(u int) {
+	p.integer = u
+}
+
+func fI(it Simpler) int {
+	switch it.(type) {
+	case *Simple:
+		it.Set(5)
+		return it.Get()
+	case *RSimple:
+		it.Set(10)
+		return it.Get()
+	}
+	return 0
 }
 
 func main() {
-	var areaIntf Shaper
-	sq1 := new(Circle)
-	sq1.radius = 5
-	areaIntf = sq1
-	// Is Square the type of areaIntf ?
-	if t, ok := areaIntf.(*Square); ok {
-		fmt.Printf("The type of areaIntf is: %T\n", t)
-	}
-	if u, ok := areaIntf.(*Circle); ok {
-		fmt.Printf("The type of areaIntf is: %T\n", u)
-	} else {
-		fmt.Println("areaIntf does not contain a variable of type Circle")
-	}
-}
-
-func (sq *Square) Area() float32 {
-	return sq.side * sq.side
-}
-
-func (ci *Circle) Area() float32 {
-	return ci.radius * ci.radius * math.Pi
+	sinple := Simpler(new(Simple))
+	rSinple := Simpler(new(RSimple))
+	println(fI(sinple))
+	println(fI(rSinple))
 }
