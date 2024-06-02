@@ -2,24 +2,23 @@ package main
 
 import (
 	"fmt"
-	"strconv"
+	"math"
 )
 
-type TwoInts struct {
-	a int
-	b int
+type Point struct {
+	x, y float64
+}
+
+func (p *Point) Abs() float64 {
+	return math.Sqrt(p.x*p.x + p.y*p.y)
+}
+
+type NamedPoint struct {
+	Point // anonymous field of Point type
+	name  string
 }
 
 func main() {
-	two1 := new(TwoInts)
-	two1.a = 12
-	two1.b = 10
-	fmt.Printf("two1 is: %v\n", two1)  // output: two1 is: (12 / 10)
-	fmt.Println("two1 is:", two1)      // output: two1 is: (12 / 10)
-	fmt.Printf("two1 is: %T\n", two1)  // output: two1 is: *main.TwoInts
-	fmt.Printf("two1 is: %#v\n", two1) // output: &main.TwoInts{a:12, b:10}
-}
-
-func (tn *TwoInts) String() string {
-	return "(" + strconv.Itoa(tn.a) + " / " + strconv.Itoa(tn.b) + ")"
+	n := &NamedPoint{Point{3, 4}, "Pythagoras"} // making pointer type variable
+	fmt.Println(n.Abs())                        // prints 5
 }
