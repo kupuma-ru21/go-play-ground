@@ -1,47 +1,32 @@
 package main
 
-import (
-	"fmt"
-	"reflect"
-	"strings"
-)
+import "fmt"
 
-func mapToStruct(m map[string]interface{}) interface{} {
-	var structFields []reflect.StructField
+type IDuck interface {
+	Quack()
+	Walk()
+}
 
-	for k, v := range m {
-		sf := reflect.StructField{
-			Name: strings.Title(k),
-			Type: reflect.TypeOf(v),
-		}
-		fmt.Println("k", k)
-		fmt.Println("v", v)
-		structFields = append(structFields, sf)
+func DuckDance(duck IDuck) {
+	for i := 1; i <= 3; i++ {
+		duck.Quack()
+		duck.Walk()
 	}
+}
 
-	// Creates the struct type
-	structType := reflect.StructOf(structFields)
+type Bird struct {
+	// ...
+}
 
-	// Creates a new struct
-	structObject := reflect.New(structType)
+func (b *Bird) Quack() {
+	fmt.Println("I am quacking!")
+}
 
-	return structObject.Interface()
+func (b *Bird) Walk() {
+	fmt.Println("I am walking!")
 }
 
 func main() {
-
-	m := make(map[string]interface{})
-
-	m["name"] = "Barack"
-	m["surname"] = "Obama"
-	m["age"] = 57
-
-	s := mapToStruct(m)
-	fmt.Println(s)
-
-	sr := reflect.ValueOf(s)
-	sr.Elem().FieldByName("Name").SetString("Donald")
-	sr.Elem().FieldByName("Surname").SetString("Trump")
-	sr.Elem().FieldByName("Age").SetInt(72)
-	fmt.Println(s)
+	b := new(Bird)
+	DuckDance(b)
 }
