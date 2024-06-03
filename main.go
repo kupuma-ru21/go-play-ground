@@ -1,42 +1,35 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"go-play-ground/mysort"
+)
 
-type Square struct {
-	side float32
+type Person struct {
+	firstName string
+	lastName  string
 }
 
-type Triangle struct {
-	base   float32
-	height float32
+type Persons []Person
+
+func (p Persons) Len() int { return len(p) }
+
+func (p Persons) Less(i, j int) bool {
+	in := p[i].lastName + " " + p[i].firstName
+	jn := p[j].lastName + " " + p[j].firstName
+	return in < jn
 }
 
-type AreaInterface interface {
-	Area() float32
-}
-
-type PeriInterface interface {
-	Area() float32
-	Perimeter() float32
+func (p Persons) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
 }
 
 func main() {
-	aI := AreaInterface(&Triangle{base: 10, height: 5})
-	fmt.Printf("The triangle has area: %f\n", aI.Area())
-
-	pI := PeriInterface(&Square{side: 5})
-	fmt.Printf("The square has area: %f\n", pI.Area())
-	fmt.Printf("The square has perimeter: %f\n", pI.Perimeter())
-}
-
-func (sq *Square) Area() float32 {
-	return sq.side * sq.side
-}
-
-func (sq *Square) Perimeter() float32 { // implement method called on square to calculate its perimeter
-	return sq.side * 4
-}
-
-func (tr *Triangle) Area() float32 { // implement method called on triangle to calculate its area
-	return (tr.base * tr.height) / 2
+	persons := Persons{
+		{"James", "Bond"},
+		{"Miss", "Moneypenny"},
+		{"Kevin", "Costner"},
+	}
+	mysort.Sort(persons)
+	fmt.Println(persons)
 }
