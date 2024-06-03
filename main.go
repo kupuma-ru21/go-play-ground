@@ -3,18 +3,45 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"strings"
 )
 
+func mapToStruct(m map[string]interface{}) interface{} {
+	var structFields []reflect.StructField
+
+	for k, v := range m {
+		sf := reflect.StructField{
+			Name: strings.Title(k),
+			Type: reflect.TypeOf(v),
+		}
+		fmt.Println("k", k)
+		fmt.Println("v", v)
+		structFields = append(structFields, sf)
+	}
+
+	// Creates the struct type
+	structType := reflect.StructOf(structFields)
+
+	// Creates a new struct
+	structObject := reflect.New(structType)
+
+	return structObject.Interface()
+}
+
 func main() {
-	var x = 3.4
-	fmt.Println("type:", reflect.TypeOf(x))
-	v := reflect.ValueOf(x)
-	fmt.Println("value:", v)
-	fmt.Println("type:", v.Type())
-	fmt.Println("kind:", v.Kind())
-	fmt.Println("value:", v.Float())
-	fmt.Println(v.Interface())
-	fmt.Printf("value is %5.2e\n", v.Interface())
-	y := v.Interface().(float64)
-	fmt.Println(y)
+
+	m := make(map[string]interface{})
+
+	m["name"] = "Barack"
+	m["surname"] = "Obama"
+	m["age"] = 57
+
+	s := mapToStruct(m)
+	fmt.Println(s)
+
+	sr := reflect.ValueOf(s)
+	sr.Elem().FieldByName("Name").SetString("Donald")
+	sr.Elem().FieldByName("Surname").SetString("Trump")
+	sr.Elem().FieldByName("Age").SetInt(72)
+	fmt.Println(s)
 }
