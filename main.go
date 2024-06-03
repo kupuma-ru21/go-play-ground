@@ -2,31 +2,51 @@ package main
 
 import "fmt"
 
-type IDuck interface {
-	Quack()
-	Walk()
+type Shaper interface {
+	Area() float32
 }
 
-func DuckDance(duck IDuck) {
-	for i := 1; i <= 3; i++ {
-		duck.Quack()
-		duck.Walk()
-	}
+type TopologicalGenus interface {
+	Rank() int
 }
 
-type Bird struct {
-	// ...
+type Square struct {
+	side float32
 }
 
-func (b *Bird) Quack() {
-	fmt.Println("I am quacking!")
+func (sq *Square) Area() float32 {
+	return sq.side * sq.side
 }
 
-func (b *Bird) Walk() {
-	fmt.Println("I am walking!")
+func (sq *Square) Rank() int {
+	return 1
+}
+
+type Rectangle struct {
+	length, width float32
+}
+
+func (r Rectangle) Area() float32 {
+	return r.length * r.width
+}
+
+func (r Rectangle) Rank() int {
+	return 2
 }
 
 func main() {
-	b := new(Bird)
-	DuckDance(b)
+	r := Rectangle{5, 3} // Area() of Rectangle needs a value
+	q := &Square{5}      // Area() of Square needs a pointer
+	shapes := []Shaper{r, q}
+	fmt.Println("Looping through shapes for area ...")
+	for n := range shapes {
+		fmt.Println("Shape details: ", shapes[n])
+		fmt.Println("Area of this shape is: ", shapes[n].Area())
+	}
+	topgen := []TopologicalGenus{r, q}
+	fmt.Println("Looping through topgen for rank ...")
+	for n := range topgen {
+		fmt.Println("Shape details: ", topgen[n])
+		fmt.Println("Topological Genus of this shape is: ", topgen[n].Rank())
+	}
 }
