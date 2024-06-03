@@ -1,31 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"go-play-ground/min"
+)
 
-type specialString string
+func ints() {
+	data := []int{74, 59, 238, -784, 9845, 959, 905, 0, 0, 42, 7586, -5467984, 7586}
+	a := min.IntArray(data) //conversion to type IntArray
+	m := min.Min(a)
+	fmt.Printf("The minimum of the array is: %v\n", m)
+}
 
-var whatIsThis specialString = "hello"
-
-func TypeSwitch() {
-	testFunc := func(any interface{}) { // lambda function in combination with empty interface
-		switch v := any.(type) {
-		case bool: // if v is bool
-			fmt.Printf("any %v is a bool type", v)
-		case int: // if v is int
-			fmt.Printf("any %v is an int type", v)
-		case float32: // if v is float32
-			fmt.Printf("any %v is a float32 type", v)
-		case string: // if v is string
-			fmt.Printf("any %v is a string type", v)
-		case specialString: // if v is specialString
-			fmt.Printf("any %v is a special String!", v)
-		default: // none of types satisfied
-			fmt.Println("unknown type!")
-		}
-	}
-	testFunc(whatIsThis)
+func strings() {
+	data := []string{"ddd", "eee", "bbb", "ccc", "aaa"}
+	a := min.StringArray(data)
+	m := min.Min(a)
+	fmt.Printf("The minimum of the array is: %v\n", m)
 }
 
 func main() {
-	TypeSwitch()
+	ints()
+	strings()
 }
