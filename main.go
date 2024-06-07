@@ -1,22 +1,39 @@
 package main
 
-import (
-	"fmt"
-	"go-play-ground/mystack"
-)
+import "fmt"
 
-var st1 mystack.Stack
+type obj interface{}
 
 func main() {
-	st1.Push("Brown")
-	st1.Push(3.14)
-	st1.Push(100)
-	st1.Push([]string{"Java", "C++", "Python", "C#", "Ruby"})
-	for {
-		item, err := st1.Pop()
-		if err != nil {
-			break
+	mf := func(i obj) obj {
+		switch i.(type) {
+		case int:
+			return i.(int) * 2
+		case string:
+			return i.(string) + i.(string)
 		}
-		fmt.Println(item)
+		return i
 	}
+
+	isl := []obj{0, 1, 2, 3, 4, 5}
+	res1 := mapFunc(mf, isl)
+	for _, v := range res1 {
+		fmt.Println(v)
+	}
+	fmt.Println()
+
+	ssl := []obj{"0", "1", "2", "3", "4", "5"}
+	res2 := mapFunc(mf, ssl)
+	for _, v := range res2 {
+		fmt.Println(v)
+	}
+}
+
+func mapFunc(mf func(obj) obj, list []obj) []obj {
+	result := make([]obj, len(list))
+
+	for ix, v := range list {
+		result[ix] = mf(v)
+	}
+	return result
 }
