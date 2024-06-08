@@ -1,25 +1,21 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 )
 
+var inputReader *bufio.Reader
+var input string
+var err error
+
 func main() {
-	f, err := os.Create("text.txt")
-	if err != nil {
-		fmt.Println(err)
-		fmt.Println("fail to open file")
+	inputReader = bufio.NewReader(os.Stdin)
+	fmt.Println("Please enter some input: ")
 
+	input, err = inputReader.ReadString('\n')
+	if err == nil {
+		fmt.Printf("The input was: %s\n", input)
 	}
-
-	str := "write this file by Golang!"
-	data := []byte(str)
-	count, err := f.Write(data)
-	if err != nil {
-		fmt.Println(err)
-		fmt.Println("fail to write file")
-	}
-
-	fmt.Printf("write %d bytes\n", count)
 }
