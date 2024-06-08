@@ -2,34 +2,25 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 )
 
-type Page struct {
-	Title string
-	Body  []byte
-}
-
-func (p *Page) save() {
-	filename := p.Title + ".txt"
-	err := os.WriteFile(filename, p.Body, 0600)
-	if err != nil {
-		fmt.Println("Error saving file: ", err)
-	}
-}
-
-func load(title string) *Page {
-	filename := title + ".txt"
-	body, err := os.ReadFile(filename)
-	if err != nil {
-		fmt.Println("Error loading file: ", err)
-	}
-	return &Page{Title: title, Body: body}
-}
-
 func main() {
-	p1 := &Page{Title: "SamplePage", Body: []byte("This is a sample Page.")}
-	p1.save()
-	p2 := load(p1.Title)
-	fmt.Println(string(p2.Body))
+	CopyFile("output/target.txt", "source.txt")
+	fmt.Println("Copy done!")
+}
+
+func CopyFile(dstName, srcName string) {
+	src, err := os.Open(srcName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer src.Close()
+	dst, err := os.OpenFile(dstName, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer dst.Close()
+	io.Copy(dst, src)
 }
