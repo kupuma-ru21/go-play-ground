@@ -1,15 +1,20 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"os"
-	"strings"
 )
 
 func main() {
-	who := "Alice "
-	if len(os.Args) > 1 {
-		who += strings.Join(os.Args[1:], " ")
-	}
-	fmt.Println("Good Morning", who)
+	strPtr := flag.String("lang", "Go", "a string")
+	numPtr := flag.Int("num", 108, "an int")
+	boolPtr := flag.Bool("truth", false, "a bool")
+	var str string
+	flag.StringVar(&str, "str", "Crystal", "a string variable")
+	flag.Parse()
+	fmt.Println("lang:", *strPtr)
+	fmt.Println("num:", *numPtr)
+	fmt.Println("truth:", *boolPtr)
+	fmt.Println("str:", str)
+	fmt.Println("tail:", flag.Args())
 }
