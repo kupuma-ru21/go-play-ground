@@ -6,20 +6,20 @@ import (
 )
 
 func main() {
-	f, err := os.Open("text.txt")
+	f, err := os.Create("text.txt")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("fail to open file")
 
 	}
 
-	data := make([]byte, 1024)
-	count, err := f.Read(data)
+	str := "write this file by Golang!"
+	data := []byte(str)
+	count, err := f.Write(data)
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("fail to read file")
+		fmt.Println("fail to write file")
 	}
 
-	fmt.Printf("read %d bytes:\n", count)
-	fmt.Println(string(data[:count]))
+	fmt.Printf("write %d bytes\n", count)
 }
