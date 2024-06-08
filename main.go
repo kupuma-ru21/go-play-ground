@@ -3,47 +3,26 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 )
 
 func main() {
-	inputReader := bufio.NewReader(os.Stdin)
-	fmt.Println("Please enter your name:")
-	input, err := inputReader.ReadString('\n')
-	if err != nil {
-		fmt.Println("There were errors reading, exiting program.")
-		return
-	}
-	fmt.Printf("Your name is %s", input)
+	inputFile, inputError := os.Open("input.dat")
+	if inputError != nil {
+		fmt.Printf("An error occurred on opening the inputfile\n" +
 
-	// For Unix: test with delimiter "\n", for Windows: test with "\r\n"
-	switch input {
-	case "Philip\n":
-		fmt.Println("Welcome Philip!")
-	case "Chris\n":
-		fmt.Println("Welcome Chris!")
-	case "Ivo\n":
-		fmt.Println("Welcome Ivo!")
-	default:
-		fmt.Printf("You are not welcome here! Goodbye!\n")
+			"Does the file exist?\n" +
+			"Have you got access to it?\n")
+		return // exit the function on error
 	}
-	// version 2:
-	switch input {
-	case "Philip\n":
-		fallthrough
-	case "Ivo\n":
-		fallthrough
-	case "Chris\n":
-		fmt.Printf("Welcome %s\n", input)
-	default:
-		fmt.Printf("You are not welcome here! Goodbye!\n")
-	}
-
-	// version 3:
-	switch input {
-	case "Philip\n", "Ivo\n":
-		fmt.Printf("Welcome %s\n", input)
-	default:
-		fmt.Printf("You are not welcome here! Goodbye!\n")
+	defer inputFile.Close()
+	inputReader := bufio.NewReader(inputFile)
+	for {
+		inputString, readerError := inputReader.ReadString('\n')
+		if readerError == io.EOF {
+			return
+		}
+		fmt.Printf("The input was: %s", inputString)
 	}
 }
