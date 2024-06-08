@@ -1,28 +1,22 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 )
 
 func main() {
-	file, err := os.Open("products.txt")
-	if err != nil {
-		panic(err)
+	outputFile, outputError := os.OpenFile("output/output.dat", os.O_WRONLY|os.O_CREATE, 0666)
+	if outputError != nil {
+		fmt.Printf("An error occurred with file creation\n")
+		return
 	}
-	defer file.Close()
-	var col1, col2, col3 []string
-	for {
-		var v1, v2, v3 string
-		_, err := fmt.Fscanln(file, &v1, &v2, &v3) // scans until newline
-		if err != nil {
-			break
-		}
-		col1 = append(col1, v1)
-		col2 = append(col2, v2)
-		col3 = append(col3, v3)
+	defer outputFile.Close()
+	outputWriter := bufio.NewWriter(outputFile)
+	outputString := "hello world!\n"
+	for i := 0; i < 10; i++ {
+		outputWriter.WriteString(outputString)
 	}
-	fmt.Println(col1)
-	fmt.Println(col2)
-	fmt.Println(col3)
+	outputWriter.Flush()
 }
