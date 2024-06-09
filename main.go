@@ -2,8 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"log"
-	"os"
+	"fmt"
 )
 
 type Address struct {
@@ -22,12 +21,15 @@ type VCard struct {
 func main() {
 	pa := &Address{"private", "Aartselaar", "Belgium"}
 	wa := &Address{"work", "Boom", "Belgium"}
-	vc := VCard{"Jan", "Kersschot", []*Address{pa, wa}, "none"}
-	file, _ := os.OpenFile("output/vcard.json", os.O_CREATE|os.O_WRONLY, 0)
-	defer file.Close()
-	enc := json.NewEncoder(file)
-	err := enc.Encode(vc)
+	vc1 := VCard{"Jan", "Kersschot", []*Address{pa, wa}, "none"}
+	// fmt.Printf("%v: \n", vc) // {Jan Kersschot [0x126d2b80 0x126d2be0] none}:
+	// JSON format:
+	js, _ := json.Marshal(vc1)
+	fmt.Printf("JSON format: %s", js)
+	vc2 := VCard{}
+	err := json.Unmarshal(js, &vc2)
 	if err != nil {
-		log.Println("Error in encoding json")
+		fmt.Println("error:", err)
 	}
+	fmt.Printf("Struct format: %v", vc2)
 }
