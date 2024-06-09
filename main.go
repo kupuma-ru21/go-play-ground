@@ -1,14 +1,25 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 )
 
-var errNotFound error = errors.New("not found error")
-
-func main() {
-	fmt.Printf("error: %v", errNotFound)
+func badCall() {
+	panic("bad end")
 }
 
-// error: Not found error
+func test() {
+	defer func() {
+		if e := recover(); e != nil {
+			fmt.Printf("Panicking %s\r\n", e)
+		}
+	}()
+	badCall()
+	fmt.Printf("After bad call\r\n")
+}
+
+func main() {
+	fmt.Printf("Calling test\r\n")
+	test()
+	fmt.Printf("Test completed\r\n")
+}
