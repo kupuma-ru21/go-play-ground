@@ -1,36 +1,41 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 )
 
-func cat(r *bufio.Reader) {
+func cat(f *os.File) {
+	const NBUF = 512
+	var buf [NBUF]byte
 	for {
-		buf, err := r.ReadBytes('\n')
-		if err == io.EOF {
-			break
+		switch nr, err := f.Read(buf[:]); true {
+		case nr < 0:
+			fmt.Fprintf(os.Stderr, "cat: error reading: %s\n", err.Error())
+			os.Exit(1)
+		case nr == 0: // EOF
+			return
+		case nr > 0:
+			if nw, ew := os.Stdout.Write(buf[0:nr]); nw != nr {
+				fmt.Fprintf(os.Stderr, "cat: error writing: %s\n", ew)
+			}
 		}
-		fmt.Fprintf(os.Stdout, "%s", buf)
 	}
 }
 
 func main() {
-	flag.Parse()
+	flag.Parse() // Scans the arg list and sets up flags
 	if flag.NArg() == 0 {
-		cat(bufio.NewReader(os.Stdin))
+		cat(os.Stdin)
 	}
 	for i := 0; i < flag.NArg(); i++ {
 		f, err := os.Open(flag.Arg(i))
-
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s:error reading from %s: %s\n",
-				os.Args[0], flag.Arg(i), err.Error())
-			continue
+		if f == nil {
+			fmt.Fprintf(os.Stderr, "cat: can't open %s: error %s\n", flag.Arg(i), err)
+			os.Exit(1)
 		}
-		cat(bufio.NewReader(f))
+		cat(f)
+		f.Close()
 	}
 }
