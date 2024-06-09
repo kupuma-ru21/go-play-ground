@@ -1,25 +1,25 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func badCall() {
-	panic("bad end")
+	a, b := 10, 0
+	n := a / b // it will cause panic as it's a division by 0
+	fmt.Println(n)
 }
 
 func test() {
 	defer func() {
 		if e := recover(); e != nil {
-			fmt.Printf("Panicking %s\r\n", e)
+			fmt.Printf("Panicking %s\n", e)
 		}
 	}()
 	badCall()
-	fmt.Printf("After bad call\r\n")
+	fmt.Println("After bad call")
 }
 
 func main() {
-	fmt.Printf("Calling test\r\n")
+	fmt.Println("Starting the program")
 	test()
-	fmt.Printf("Test completed\r\n")
+	fmt.Println("Ending the program")
 }
