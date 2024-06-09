@@ -5,31 +5,15 @@ import (
 	"fmt"
 )
 
-func main() {
-	b := []byte(`{"Name": "Wednesday", "Age": 6, "Parents": ["Gomez", "Morticia"]}`)
-	var f interface{}
-	err := json.Unmarshal(b, &f)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(f)
-	// fmt.Println(f["Name"]) // invalid operation: cannot index f (variable of type interface{})
-	m := f.(map[string]interface{})
-	fmt.Println("Name is", m["Name"])
+type Node struct {
+	Left  *Node
+	Value interface{}
+	Right *Node
+}
 
-	for k, v := range m {
-		switch vv := v.(type) {
-		case string:
-			fmt.Println(k, "is string", vv)
-		case float64:
-			fmt.Println(k, "is float64", vv)
-		case []interface{}:
-			fmt.Println(k, "is an array:")
-			for i, u := range vv {
-				fmt.Println(i, u)
-			}
-		default:
-			fmt.Println(k, "is of a type I don't know how to handle")
-		}
-	}
+func main() {
+	b := []byte(`{"Value": "Father", "Left": {"Value": "Left child"}, "Right": {"Value": "Right child"}}`)
+	var f Node
+	json.Unmarshal(b, &f)
+	fmt.Println(f, f.Left, f.Right)
 }
