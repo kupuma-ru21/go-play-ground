@@ -2,11 +2,16 @@ package main
 
 import (
 	"fmt"
-	"go-play-ground/even"
 )
 
 func main() {
-	for i := 0; i <= 100; i++ {
-		fmt.Printf("Is the integer %d even? %v\n", i, even.Even(i))
+	f(5)
+}
+
+func f(n int) {
+	defer func() { fmt.Println(n) }()
+	if n == 0 {
+		panic(0)
 	}
+	f(n - 1)
 }
