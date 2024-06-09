@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"encoding/gob"
+	"fmt"
 	"log"
 	"os"
 )
@@ -19,14 +21,17 @@ type VCard struct {
 	Remark    string
 }
 
+var content string
+var vc VCard
+
 func main() {
-	var vc VCard
-	file, _ := os.OpenFile("output/vcard.gob", os.O_CREATE|os.O_WRONLY, 0)
+	file, _ := os.Open("output/vcard.gob")
 	defer file.Close()
-	decoder := gob.NewDecoder(file)
-	err := decoder.Decode(vc)
+	inReader := bufio.NewReader(file)
+	dec := gob.NewDecoder(inReader)
+	err := dec.Decode(&vc)
 	if err != nil {
-		log.Println("Error in encoding gob")
+		log.Println("Error in decoding gob")
 	}
-	log.Println(vc)
+	fmt.Println(vc)
 }
