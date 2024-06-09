@@ -1,20 +1,36 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
+	"io"
+	"os"
 )
 
+func cat(r *bufio.Reader) {
+	for {
+		buf, err := r.ReadBytes('\n')
+		if err == io.EOF {
+			break
+		}
+		fmt.Fprintf(os.Stdout, "%s", buf)
+	}
+}
+
 func main() {
-	strPtr := flag.String("lang", "Go", "a string")
-	numPtr := flag.Int("num", 108, "an int")
-	boolPtr := flag.Bool("truth", false, "a bool")
-	var str string
-	flag.StringVar(&str, "str", "Crystal", "a string variable")
 	flag.Parse()
-	fmt.Println("lang:", *strPtr)
-	fmt.Println("num:", *numPtr)
-	fmt.Println("truth:", *boolPtr)
-	fmt.Println("str:", str)
-	fmt.Println("tail:", flag.Args())
+	if flag.NArg() == 0 {
+		cat(bufio.NewReader(os.Stdin))
+	}
+	for i := 0; i < flag.NArg(); i++ {
+		f, err := os.Open(flag.Arg(i))
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s:error reading from %s: %s\n",
+				os.Args[0], flag.Arg(i), err.Error())
+			continue
+		}
+		cat(bufio.NewReader(f))
+	}
 }
