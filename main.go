@@ -1,24 +1,31 @@
 package main
 
 import (
-	"crypto/sha1"
+	"bufio"
 	"fmt"
 	"io"
-	"log"
+	"os"
 )
 
 func main() {
-	hash := sha1.New()
-	io.WriteString(hash, "test")
-	b := []byte{}
-	fmt.Printf("Result: %x\n", hash.Sum(b))
-	fmt.Printf("Result: %d\n", hash.Sum(b))
-	hash.Reset()
-	data := []byte("We shall overcome!")
-	n, err := hash.Write(data)
-	if n != len(data) || err != nil {
-		log.Printf("Hash write error: %v / %v", n, err)
+	inputFile, _ := os.Open("input.txt")
+	outputFile, _ := os.OpenFile("output.txt", os.O_WRONLY|os.O_CREATE, 0666)
+	defer inputFile.Close()
+	defer outputFile.Close()
+	inputReader := bufio.NewReader(inputFile)
+	outputWriter := bufio.NewWriter(outputFile)
+	for {
+		inputString, _, readerError := inputReader.ReadLine()
+		if readerError == io.EOF {
+			fmt.Println("EOF")
+			break
+		}
+		outputString := string([]byte(inputString)[2:5]) + "\r\n"
+		_, err := outputWriter.WriteString(outputString)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
-	checksum := hash.Sum(b)
-	fmt.Printf("Result: %x\n", checksum)
+	outputWriter.Flush()
 }
