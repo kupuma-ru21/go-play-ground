@@ -5,15 +5,18 @@ import (
 	"fmt"
 )
 
-type Node struct {
-	Left  *Node
-	Value interface{}
-	Right *Node
+type Person struct {
+	Name string `json:"personName"`
+	Age  int    `json:"personAge"`
 }
 
 func main() {
-	b := []byte(`{"Value": "Father", "Left": {"Value": "Left child"}, "Right": {"Value": "Right child"}}`)
-	var f Node
-	json.Unmarshal(b, &f)
-	fmt.Println(f, f.Left, f.Right)
+	b := []byte(`{"personName": "Obama", "personAge": 57}`)
+	var p Person
+	// Unmarshalling
+	json.Unmarshal(b, &p)
+	fmt.Println(p)
+	// Marshalling
+	js, _ := json.Marshal(p)
+	fmt.Printf("%s\n", js)
 }
