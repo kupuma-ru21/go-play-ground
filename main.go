@@ -1,37 +1,24 @@
 package main
 
 import (
-	"bufio"
-	"encoding/gob"
+	"crypto/sha1"
 	"fmt"
+	"io"
 	"log"
-	"os"
 )
 
-type Address struct {
-	Type    string
-	City    string
-	Country string
-}
-
-type VCard struct {
-	FirstName string
-	LastName  string
-	Addresses []*Address
-	Remark    string
-}
-
-var content string
-var vc VCard
-
 func main() {
-	file, _ := os.Open("output/vcard.gob")
-	defer file.Close()
-	inReader := bufio.NewReader(file)
-	dec := gob.NewDecoder(inReader)
-	err := dec.Decode(&vc)
-	if err != nil {
-		log.Println("Error in decoding gob")
+	hash := sha1.New()
+	io.WriteString(hash, "test")
+	b := []byte{}
+	fmt.Printf("Result: %x\n", hash.Sum(b))
+	fmt.Printf("Result: %d\n", hash.Sum(b))
+	hash.Reset()
+	data := []byte("We shall overcome!")
+	n, err := hash.Write(data)
+	if n != len(data) || err != nil {
+		log.Printf("Hash write error: %v / %v", n, err)
 	}
-	fmt.Println(vc)
+	checksum := hash.Sum(b)
+	fmt.Printf("Result: %x\n", checksum)
 }
