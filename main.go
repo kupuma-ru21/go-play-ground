@@ -20,17 +20,13 @@ type VCard struct {
 }
 
 func main() {
-	pa := &Address{"private", "Aartselaar", "Belgium"}
-	wa := &Address{"work", "Boom", "Belgium"}
-	vc := VCard{"Jan", "Kersschot", []*Address{pa, wa}, "none"}
-
-	// fmt.Printf("%v: \n", vc) // {Jan Kersschot [0x126d2b80 0x126d2be0] none}:
-	// using an encoder:
+	var vc VCard
 	file, _ := os.OpenFile("output/vcard.gob", os.O_CREATE|os.O_WRONLY, 0)
 	defer file.Close()
-	enc := gob.NewEncoder(file)
-	err := enc.Encode(vc)
+	decoder := gob.NewDecoder(file)
+	err := decoder.Decode(vc)
 	if err != nil {
 		log.Println("Error in encoding gob")
 	}
+	log.Println(vc)
 }
